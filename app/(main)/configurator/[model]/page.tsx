@@ -83,9 +83,9 @@ export default function ConfiguratorPage() {
         }));
       }
     } catch (error) {
-  console.error('Error fetching vehicle:', error);
-  toast("Failed to load vehicle");
-} finally {
+      console.error('Error fetching vehicle:', error);
+      toast("Failed to load vehicle");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -142,8 +142,8 @@ export default function ConfiguratorPage() {
     } else {
       navigator.clipboard.writeText(url);
       toast("Success", {
-  description: "Link copied to clipboard"
-});
+        description: "Link copied to clipboard"
+      });
     }
   };
 

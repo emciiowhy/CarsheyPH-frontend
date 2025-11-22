@@ -4,10 +4,10 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@clerk/nextjs';
-import { Calendar, Clock, MapPin, Car } from 'lucide-react';
+import { Calendar, Clock, MapPin, Car, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,7 +21,7 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { testDriveApi } from '@/lib/api/client';
 
-export default function TestDrivePage() {
+function TestDriveContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { isSignedIn } = useAuth();
@@ -55,11 +55,9 @@ export default function TestDrivePage() {
     e.preventDefault();
 
     if (!isSignedIn) {
-      toast({
-        title: 'Sign in required',
+      toast('Sign in required', {
         description: 'Please sign in to book a test drive',
-        variant: 'destructive',
-      } as any);
+      });
       router.push('/login');
       return;
     }
@@ -68,18 +66,15 @@ export default function TestDrivePage() {
     try {
       await testDriveApi.book(formData);
 
-      toast({
-        title: 'Test Drive Booked!',
+      toast('Test Drive Booked!', {
         description: 'We will contact you shortly to confirm your appointment.',
-      } as any);
+      });
 
       router.push('/vehicles');
     } catch (error: any) {
-      toast({
-        title: 'Error',
+      toast('Error', {
         description: error.message || 'Failed to book test drive',
-        variant: 'destructive',
-      } as any);
+      });
     } finally {
       setIsLoading(false);
     }
@@ -259,5 +254,17 @@ export default function TestDrivePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function TestDrivePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-red-600" />
+      </div>
+    }>
+      <TestDriveContent />
+    </Suspense>
   );
 }
