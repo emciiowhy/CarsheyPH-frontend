@@ -88,13 +88,19 @@ export default function FinancingPage() {
       );
 
       if (response.ok) {
-        toast.success("Application submitted! We'll contact you shortly.");
+        toast("Application submitted!", {
+          description: "We'll contact you shortly to review your application.",
+        });
         router.push("/");
       } else {
-        toast.error("Submission failed. Please try again.");
+        toast("Submission failed", {
+          description: "Please try again or contact support if the issue persists.",
+        });
       }
     } catch (err) {
-      toast.error("Something went wrong. Try again later.");
+      toast("Something went wrong", {
+        description: "Please try again later.",
+      });
     } finally {
       setIsLoading(false);
     }
