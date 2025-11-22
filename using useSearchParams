@@ -1,0 +1,5 @@
+[33m0197a07[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m page.tsx fixed
+[33m9b27061[m Force rebuild - 1763843314
+[33m92ef97c[m Force Vercel update
+[33m85a31fe[m Fix search page - wrap useSearchParams in Suspense
+[33m9ae3d98[m Fix toast notifications in financing page
