@@ -73,7 +73,7 @@ export default function ConfiguratorPage() {
     try {
       const response = await vehicleApi.getBySlug(params.model as string);
       if (response.success) {
-        setVehicle(response.data); // removed .vehicle
+        setVehicle(response.data);
         setConfiguration(prev => ({
           ...prev,
           color: colors[0].name,
@@ -83,9 +83,9 @@ export default function ConfiguratorPage() {
         }));
       }
     } catch (error) {
-      console.error('Error fetching vehicle:', error);
-      toast(<div>Failed to load vehicle</div>); // JSX instead of title/description
-    } finally {
+  console.error('Error fetching vehicle:', error);
+  toast("Failed to load vehicle");
+} finally {
       setIsLoading(false);
     }
   };
@@ -141,7 +141,9 @@ export default function ConfiguratorPage() {
       await navigator.share({ title: `My Custom ${vehicle?.brand} ${vehicle?.model}`, url });
     } else {
       navigator.clipboard.writeText(url);
-      toast(<div>Link copied to clipboard</div>); // JSX
+      toast("Success", {
+  description: "Link copied to clipboard"
+});
     }
   };
 
