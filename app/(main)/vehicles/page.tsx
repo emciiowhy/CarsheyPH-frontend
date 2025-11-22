@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -10,7 +10,7 @@ import { vehicleApi, Vehicle } from "@/lib/api/client";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
-export default function VehiclesPage() {
+function VehiclesContent() {
   const searchParams = useSearchParams();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -88,7 +88,7 @@ export default function VehiclesPage() {
         <div className="flex flex-col lg:flex-row gap-10">
           {/* SIDEBAR FILTERS */}
           <aside className="lg:w-72 lg:sticky lg:top-24 h-fit">
-            <VehicleFilters filters={filters} onChange={handleFilterChange} />
+            <VehicleFilters filters={filters} onChange={handleFilterChange} />        
           </aside>
 
           {/* MAIN CONTENT */}
@@ -96,7 +96,7 @@ export default function VehiclesPage() {
             {/* RESULTS COUNT */}
             <div className="mb-6">
               <p className="text-gray-600 text-sm">
-                {isLoading ? "Loading..." : `${vehicles.length} vehicles found`}
+                {isLoading ? "Loading..." : `${vehicles.length} vehicles found`}      
               </p>
             </div>
 
@@ -140,12 +140,12 @@ export default function VehiclesPage() {
               <>
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={currentPage} // smooth animation when switching pages
+                    key={currentPage} // smooth animation when switching pages        
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.25 }}
-                    className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+                    className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"  
                   >
                     {vehicles.map((vehicle) => (
                       <VehicleCard key={vehicle.id} vehicle={vehicle} />
@@ -155,7 +155,7 @@ export default function VehiclesPage() {
 
                 {/* PAGINATION */}
                 {totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-2 mt-10">
+                  <div className="flex items-center justify-center gap-2 mt-10">      
                     <Button
                       variant="outline"
                       onClick={() =>
@@ -167,7 +167,7 @@ export default function VehiclesPage() {
                     </Button>
 
                     <div className="flex items-center gap-1">
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(       
                         (page) => (
                           <Button
                             key={page}
@@ -176,7 +176,7 @@ export default function VehiclesPage() {
                                 ? "bg-red-600 text-white"
                                 : ""
                               }`}
-                            variant={page === currentPage ? "default" : "outline"}
+                            variant={page === currentPage ? "default" : "outline"}    
                           >
                             {page}
                           </Button>
@@ -201,5 +201,17 @@ export default function VehiclesPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VehiclesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="w-10 h-10 animate-spin text-red-600" />
+      </div>
+    }>
+      <VehiclesContent />
+    </Suspense>
   );
 }
